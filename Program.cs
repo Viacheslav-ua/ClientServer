@@ -16,21 +16,26 @@ namespace ClientServer
             serverSocet.Start();
             Console.WriteLine("Server started");
 
-            TcpClient clientSocet = serverSocet.AcceptTcpClient();
-            NetworkStream stream = clientSocet.GetStream();
+            while (true)
+            {
+                TcpClient clientSocet = serverSocet.AcceptTcpClient();
+                NetworkStream stream = clientSocet.GetStream();
 
-            string message = "<h1>Hello !<h1>\n";
-            byte[] bytes = Encoding.ASCII.GetBytes(message);
-            //Encoding.ASCII.GetBytes(message);
+                string message = "<h1>Hello!<h1>\n";
+                byte[] bytes = Encoding.ASCII.GetBytes(message);
+            
+                stream.Write(bytes, 0, bytes.Length);
+                stream.Flush();
+                Console.WriteLine("Sent message " + message);
+                clientSocet.Close();
+            }
+            
 
-            stream.Write(bytes, 0, bytes.Length);
-            stream.Flush();
+            
+            //serverSocet.Stop();
+            //Console.WriteLine("Server stopped");
 
-            clientSocet.Close();
-            serverSocet.Stop();
-            Console.WriteLine("Server stopped");
-
-            Console.ReadKey();
+            //Console.ReadKey();
         }
     }
 }
