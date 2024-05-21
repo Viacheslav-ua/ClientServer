@@ -15,7 +15,16 @@ namespace ClientServer
             TcpListener serverSocet = new TcpListener(IPAddress.Any, 7000);
             serverSocet.Start();
             Console.WriteLine("Server started");
+
             TcpClient clientSocet = serverSocet.AcceptTcpClient();
+            NetworkStream stream = clientSocet.GetStream();
+
+            string message = "<h1>Hello !<h1>\n";
+            byte[] bytes = Encoding.ASCII.GetBytes(message);
+            //Encoding.ASCII.GetBytes(message);
+
+            stream.Write(bytes, 0, bytes.Length);
+            stream.Flush();
 
             clientSocet.Close();
             serverSocet.Stop();
