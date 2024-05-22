@@ -21,11 +21,18 @@ namespace ClientServer
                 TcpClient clientSocet = serverSocet.AcceptTcpClient();
                 NetworkStream stream = clientSocet.GetStream();
 
-                string message = "<h1>Hello!<h1>\n";
+                
+                byte[] buffer = new byte[256];
+                int length = stream.Read(buffer, 0, buffer.Length);
+                string request = Encoding.ASCII.GetString(buffer, 0, length);
+                Console.WriteLine("Got request: " + request);
+
+
+                string message = "Length of uour request: " + request + " = " + request.Length;
                 byte[] bytes = Encoding.ASCII.GetBytes(message);
-            
                 stream.Write(bytes, 0, bytes.Length);
                 stream.Flush();
+
                 Console.WriteLine("Sent message " + message);
                 clientSocet.Close();
             }
